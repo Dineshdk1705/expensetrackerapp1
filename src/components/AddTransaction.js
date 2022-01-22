@@ -1,50 +1,65 @@
-import React, { useState, useContext } from 'react';
-import { GlobalContext } from '../context/GlobalState';
-
+import React, { useState, useContext } from "react";
+import { GlobalContext } from "../context/GlobalState";
 
 export const AddTransaction = () => {
-    const [text, setText] = useState('');
-    const [amount, setAmount] = useState(0);
+  const [text, setText] = useState("");
+  const [amount, setAmount] = useState(0);
 
-    const { addTransaction } = useContext(GlobalContext);
+  const { addTransaction } = useContext(GlobalContext);
 
-    const onSubmit = event => {
-        event.preventDefault();
+  const onSubmit = (event) => {
+    event.preventDefault();
 
-        const newTransaction = {
-            id: Math.floor(Math.random() * 100000000),
-            text,
-            amount: + amount
-        }
+    const newTransaction = {
+      id: Math.floor(Math.random() * 100000000),
+      text,
+      amount: +amount,
+    };
 
-        addTransaction(newTransaction);
-    }
+    addTransaction(newTransaction);
+    setText("");
+    setAmount(0);
+  };
 
-    function visibleHistory(){
-        document.getElementById("transactionList-id").style.display='block';
-    }
+  function visibleHistory() {
+    document.getElementById("transactionList-id").style.display = "block";
+  }
 
+  return (
+    <>
+      <h3>Add new transaction</h3>
+      <form onSubmit={onSubmit}>
+        <div className="form-control">
+          <label htmlFor="text">Text</label>
+          <input
+            type="text"
+            className="input-item"
+            value={text}
+            onChange={(event) => setText(event.target.value)}
+            placeholder="Enter text..."
+          />
+        </div>
+        <div className="form-control">
+          <label htmlFor="amount">
+            Amount
+            <br />
+          </label>
+          {/* (negative - expense, positive - income)  */}
 
-    return (
-        <>
-            <h3>Add new transaction</h3>
-            <form onSubmit={onSubmit}>
-                <div className="form-control">
-                    <label htmlFor="text">Text</label>
-                    <input type="text" value={text} onChange={(event) => setText(event.target.value)} 
-                    placeholder="Enter text..." />
-                </div>
-                <div className="form-control">
-                    <label htmlFor="amount"
-                    >Amount<br />
-                    (negative - expense, positive - income) </label>
-
-                    <input type="number" value={amount} onChange={(event) => setAmount(event.target.value)} placeholder="Enter amount..." />
-                    <div>
-                        <button className="btn" onClick={visibleHistory}>Add transaction</button>
-                    </div>
-                </div>
-            </form>
-        </>
-    )
-}
+          <input
+            type="number"
+            className="input-amount"
+            value={amount}
+            onChange={(event) => setAmount(event.target.value)}
+            placeholder="Enter amount..."
+          />
+          <div>
+            <button className="btn" onClick={visibleHistory}>
+              Add transaction
+            </button>
+          </div>
+        </div>
+      </form>
+    </>
+  );
+};
